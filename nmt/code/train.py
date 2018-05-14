@@ -239,9 +239,11 @@ for epoch in range(maxEpoch):
             # If devGleu was improved, translate the squad context/question
             # and update
             if devGleu >= bestDevGleu:
-                f_squad_context = open('./squad_context.txt', 'w')
-                f_squad_question = open('./squad_question.txt', 'w')
-                attention_file_path = './squad_attention.txt'
+                f_squad_context = open(
+                    './squad_context_bleu_' + str(devGleu) + '_perp_' str(devPerp) + '.txt', 'w')
+                f_squad_question = open(
+                    './squad_question_bleu_' + str(devGleu) + '_perp_' str(devPerp) + '.txt', , 'w')
+                attention_file_path = './squad_attention_bleu_' + str(devGleu) + '_perp_' str(devPerp) + '.txt',
 
                 for batch in batchListSQuADContext:
                     batchSize = batch[1] - batch[0] + 1
