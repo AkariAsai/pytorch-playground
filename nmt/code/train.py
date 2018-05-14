@@ -244,6 +244,7 @@ for epoch in range(maxEpoch):
                 f_squad_question = open(
                     './squad_question_bleu_' + str(devGleu) + '_perp_' str(devPerp) + '.txt', , 'w')
                 attention_file_path = './squad_attention_bleu_' + str(devGleu) + '_perp_' str(devPerp) + '.txt',
+                attention_scores_matrix = []
 
                 for batch in batchListSQuADContext:
                     batchSize = batch[1] - batch[0] + 1
@@ -258,6 +259,7 @@ for epoch in range(maxEpoch):
                     indicesGreedy, lengthsGreedy, attentionIndices, attentionScores = encdec.greedyTrans(
                         corpus.targetVoc.bosIndex, corpus.targetVoc.eosIndex, lengthsSource,
                         embedding.targetEmbedding, sourceH, (hn, cn), maxGenLen=maxLen, return_attention=True)
+                    attention_scores_matrix.append(attentionScores[0][0])
                     indicesGreedy = indicesGreedy.cpu()
 
                     for i in range(batchSize):
@@ -271,8 +273,8 @@ for epoch in range(maxEpoch):
                                 f_squad_context.write(
                                     corpus.targetVoc.tokenList[index].str + ' ')
                         f_squad_context.write('\n')
-                    write_attention_weights_to_file(
-                        attentionScores, attention_file_path)
+                write_attention_weights_to_file(
+                    attention_scores_matrix, attention_file_path)
 
                 for batch in batchListSQuADQuestion:
                     batchSize = batch[1] - batch[0] + 1
